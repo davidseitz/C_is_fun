@@ -10,6 +10,7 @@ enum {
     UPPER_PRIME_BOUND = 10000
 
 };
+
 uint64_t squarerootapproximation(const uint64_t *number, uint64_t *end)
 {
 //Number has to be bigger than 0
@@ -43,13 +44,43 @@ int persistance(uint64_t *buffer) {
         //Couldn't open file
         return FAILURE;
     }
-    fwrite(buffer,sizeof(uint64_t),BUFFERSIZE,fp);
+    //Ignore return of fwrite for now
+    (void)fwrite(buffer,sizeof(uint64_t),BUFFERSIZE,fp);
     fclose(fp);
     return SUCCESS;
 }
+/**
+ * @brief put the buffer to disk if it is full
+ * @TODO fseek return value checkq
+ * @return 0 on Success, 1 on failure
+ */
+int buffer_to_disk(uint64_t *buffer, uint64_t primenumcounter, FILE *fp)
+{
+    //Makros for fseek(FILE *fp, long int offset, int whence)
+    //SEEK_SET, SEEK_CUR, SEEK_END respectiley for start, current, end
+    if(fseek(fp,primenumcounter*8,SEEK_END) ==0) {
+        (void)fwrite(buffer,sizeof(uint64_t),BUFFERSIZE, fp);
+        return SUCCESS;
+    } else {
+        return FAILURE;
+    }
 
+}
+/**
+ * @brief Write to buffer from disk
+ * @TODO fread return value check
+ * @return 0 on SUCCESS, 1 on FAILURE
+ */
+int buffer_from_disk(uint64_t *buffer, uint64_t counter, FILE *fp)
+{
+    if (fseek(fp, counter*8,SEEK_SET) == 0) {
+        (void)fread(buffer,sizeof(uint64_t),BUFFERSIZE,fp);
+        return SUCCESS;
+    }
+    return FAILURE;
+}
 int main(int argc, char** argv) {
-
+    uint64_t primbuffer[BUFFERSIZE ];
     uint64_t buffer[BUFFERSIZE];
     uint64_t number = 1;
     uint64_t primenumcounter = 0;

@@ -17,7 +17,7 @@ int main(const int argc,const char **argv)
 	uint64_t prevnum = -1;
         while( fread(&num,sizeof(uint64_t),1,fp) != -1 && num != prevnum)
         {
-            printf("Number = %li\n", num);
+            printf("Number = %li\n Filepointer %li\n\n", num, ftell(fp));
 	    num = prevnum;
 
         }
