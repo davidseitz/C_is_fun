@@ -51,9 +51,10 @@ int persistance(uint64_t *buffer) {
 }
 /**
  * @brief put the buffer to disk if it is full
- * @TODO fseek return value checkq
+ * @TODO fseek return value check, is this function semantically correct? 
  * @return 0 on Success, 1 on failure
  */
+
 int buffer_to_disk(uint64_t *buffer, uint64_t primenumcounter, FILE *fp)
 {
     //Makros for fseek(FILE *fp, long int offset, int whence)
@@ -80,7 +81,12 @@ int buffer_from_disk(uint64_t *buffer, uint64_t counter, FILE *fp)
     return FAILURE;
 }
 int main(int argc, char** argv) {
-    uint64_t primbuffer[BUFFERSIZE ];
+	FILE *primenums;
+	primenums = fopen("primenums.bin", "wb");
+	if (primenums == NULL){
+		return FAILURE;
+	}
+    uint64_t primebuffer[BUFFERSIZE];
     uint64_t buffer[BUFFERSIZE];
     uint64_t number = 1;
     uint64_t primenumcounter = 0;
@@ -88,8 +94,11 @@ int main(int argc, char** argv) {
         uint64_t n = squarerootapproximation(&i, &number);
         if (primenum(i, number) != NOT_A_PRIME)
         {
-            buffer[primenumcounter++] = i;
 
+            buffer[primenumcounter++] = i;
+		if(primenumcounter > BUFFERSIZE && !buffer_to_disk(buffer, primenumcounter,primenums)){
+			return FAILURE;
+		}
             // Print the primenums
             //printf("Primenum: %li, Squareroot: %li\n",i,number);
         }
