@@ -21,6 +21,17 @@ uint64_t squarerootapproximation(const uint64_t *number, uint64_t *end)
     }
 
 }
+//TODO array
+uint64_t primenumsmart(const uint64_t number_to_test, const uint64_t up_to_test){
+	uint64_t index = 0
+	while( index < up_to_test){
+		if(numberto_test % array[index++] != 0){
+			return NOT_A_PRIME;
+		}
+	}
+	return number;
+
+}
 uint64_t primenum(const uint64_t number, uint64_t end)
 {
     uint64_t i = 2;
@@ -100,7 +111,7 @@ int main(int argc, char** argv) {
 			return FAILURE;
 		}
             // Print the primenums
-            //printf("Primenum: %li, Squareroot: %li\n",i,number);
+            printf("Primenum: %li, Squareroot: %li\n",i,number);
         }
     }
     /*
