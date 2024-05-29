@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <string.h>
-
+#include <stdlib.h>
 int main(int argc, char **argv)
 {
+	(void)system("./build/HelloWorld");
     if (argc == 1) {
         printf("Give at least 1 argument\n");
         return 1;
